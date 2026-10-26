@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+enum PlaceType {
+  hospital
+  clinic
+  home
+}
+
+enum FeeType {
+  per_visit
+  package
+}
+
+enum DayResultKind {
+  done
+  doctor_leave
+  patient_leave
+}
+
+model Doctor {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  patients       Patient[]
+  sessions       Session[]
+  passwordResets PasswordReset[]
+  holidays       Holiday[]
+  createdAt      DateTime        @default(now())
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  doctorId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model PasswordReset {
+  id        String    @id @default(cuid())
+  doctorId  String
+  doctor    Doctor    @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model Patient {
+  id            String      @id @default(cuid())
+  doctorId      String
+  doctor        Doctor      @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  publicCode    String
+  name          String
+  age           Int
+  gender        Gender
+  condition     String
+  placeType     PlaceType
+  placeName     String
+  address       String?
+  landmark      String?
+  timeSlot      String
+  timeEnd       String      @default("")
+  daysOff       Int[]       @default([])
+  feeType       FeeType
+  feeAmount     Int
+  treatmentDays Int
+  startDate     DateTime    @db.Date
+  closedOn      DateTime?   @db.Date
+  dayResults    DayResult[]
+  extensions    Extension[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([doctorId, publicCode])
+  @@index([doctorId])
+}
+
+model DayResult {
+  id          String        @id @default(cuid())
+  patientId   String
+  patient     Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  date        DateTime      @db.Date
+  result      DayResultKind
+  feeSnapshot Int?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([patientId, date])
+}
+
+model Holiday {
+  id        String   @id @default(cuid())
+  doctorId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  date      DateTime @db.Date
+  createdAt DateTime @default(now())
+
+  @@unique([doctorId, date])
+}
+
+model Extension {
+  id          String   @id @default(cuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  extraDays   Int
+  extraAmount Int      @default(0)
+  createdOn   DateTime @db.Date
+  createdAt   DateTime @default(now())
+}

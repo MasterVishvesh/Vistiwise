@@ -1,0 +1,26 @@
+{
+  "name": "physio-call",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,green \"npm run dev -w @physio/api\" \"npm run dev -w @physio/web\"",
+    "test": "npm test -w @physio/domain",
+    "db:migrate": "npm run db:deploy -w @physio/api",
+    "db:dev": "npm run db:migrate -w @physio/api"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "allowScripts": {
+    "prisma@6.19.3": true,
+    "@prisma/client@6.19.3": true,
+    "@prisma/engines@6.19.3": true,
+    "esbuild@0.28.2": true
+  }
+}

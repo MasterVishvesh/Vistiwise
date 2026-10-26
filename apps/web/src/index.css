@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Figtree", sans-serif;
+  --font-serif: "Newsreader", serif;
+  --color-paper: #f3efe6;
+  --color-ink: #1c1915;
+  --color-muted: #6b645b;
+  --color-line: #e3d9cb;
+  --color-card: #fffdf8;
+  --color-pine: #1e4d3a;
+  --color-pine-soft: #e6f0ea;
+  --color-clay: #8d4b1f;
+  --color-clay-soft: #f8eee6;
+  --color-danger: #8f2d2d;
+}
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@media (max-width: 375px) {
+  main.mx-auto {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@physio/api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.6",
+    "@physio/domain": "*",
+    "@prisma/client": "^6.17.1",
+    "hono": "^4.9.10",
+    "tsx": "^4.20.6"
+  },
+  "devDependencies": {
+    "prisma": "^6.17.1"
+  }
+}
